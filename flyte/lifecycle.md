@@ -30,7 +30,7 @@ execution = remote.execute(entity, inputs=inputs)
 1. Depending on the entity, the `flytekit.remote.remote.FlyteRemote.execute()` will call different methods.
    For `PythonTask`/`WorkflowBase`/`LaunchPlan`, the `execute_local_task()`/`execute_local_workflow()`/`execute_local_launch_plan()`
    will be invoked. Those methods will register task/workflow/launch plan first.
-2. Eventually, all types of entities will be converted to either `FluteTask` or `FlyteLaunchPlan`. And the
+2. Eventually, all types of entities will be converted to either `FlyteTask` or `FlyteLaunchPlan`. And the
    `FlyteRemote.execute_remote_task_lp()` will be invoked.
 3. `FlyteRemote.execute_remote_task_lp()` will call `FlyteRemote._execute()`.
 4. All the `inputs` will be translated to `Literal`s with `flytekit.core.type_engine.TypeEngine.to_literal()`.
@@ -42,7 +42,7 @@ execution = remote.execute(entity, inputs=inputs)
        `Blob.uri` will be set to the `remote_path`.
 5. The `Literal`s will then be converted to `flytekit.models.literals.LiteralMap`.
 6. An `ExecutionSpec` will be generated using the entity.
-7. The `flytekit.clients.friendly.SynchronousFlyteClient.creat_execution()` is then invoked.
+7. The `flytekit.clients.friendly.SynchronousFlyteClient.create_execution()` is then invoked.
     1. This will convert both `ExecutionSpec` and `inputs` (a `LiteralMap`) to protobuf using their `.to_flyte_idl()` methods.
     2. It will then send the `ExecutionCreateRequest` through gRPC calls.
 
@@ -68,7 +68,7 @@ execution = remote.execute(entity, inputs=inputs)
            `flytekit.core.data_persistence.FileAccessProvider.get_random_local_path()`. Then create a `FlyteFile` by setting
            the `path` to `local_path`, `_downloader` to `flytekit.core.data_persistence.FileAccessProvider.get_data()`
            , `_remote_source` to the `uri`.
-        4. Call `execute()` to execute the actual code we want to run and generate `output`. For example, a `PythonFunctionTask`
+        4. Call `execute()` to execute the actual code we want to run and generate `outputs`. For example, a `PythonFunctionTask`
            will just execute the `_task_function`.
         5. Convert `outputs` to `LiteralMap` using `PythonTask._output_to_literal_map()`. It uses `TypeEngine.to_literal()`
            and `flytekit.models.literals.LiteralMap`.
